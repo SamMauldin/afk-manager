@@ -4,7 +4,8 @@ const logger = Pino({
   prettyPrint: true,
 });
 
-import { DISCORD_TOKEN, CATEGORY_AFK_CHANNELS } from './config';
+const DISCORD_TOKEN = process.env.AFK_DISCORD_TOKEN!;
+const CATEGORY_AFK_CHANNELS = JSON.parse(process.env.AFK_CATEGORY_TO_CHANNEL!);
 
 const client = new Client();
 
