@@ -47,12 +47,11 @@ const processMember = async (memberId: string, guildId: string) => {
   const afkChannelId = CATEGORY_AFK_CHANNELS[member.voice.channel.parentID];
   if (!afkChannelId) return;
 
-  if (member.voice.streaming) return;
-
   if (member.voice.selfDeaf === (member.voice.channel.id === afkChannelId))
     return;
 
   if (member.voice.selfDeaf) {
+    if (member.voice.streaming) return;
     memberAFKInfo[member.id]!.lastChannel = member.voice.channel.id;
 
     logger.info({
@@ -91,7 +90,7 @@ client.on('voiceStateUpdate', async (_, newState) => {
     memberAFKInfo[newState.member.id]!.timeout === undefined;
   }
 
-  const timeoutLength = newState.selfDeaf ? 1000 * 30 : 1000;
+  const timeoutLength = newState.selfDeaf ? 1000 * 30 : 0;
 
   logger.info({
     msg: 'setting tick timeout',
