@@ -5,7 +5,6 @@ const logger = Pino({
 });
 
 const DISCORD_TOKEN = process.env.AFK_DISCORD_TOKEN!;
-const CATEGORY_AFK_CHANNELS = JSON.parse(process.env.AFK_CATEGORY_TO_CHANNEL!);
 
 const client = new Client();
 
@@ -44,7 +43,13 @@ const processMember = async (memberId: string, guildId: string) => {
     guildId,
   });
 
-  const afkChannelId = CATEGORY_AFK_CHANNELS[member.voice.channel.parentID];
+  const categoryChannels = member.voice.channel.parent?.children.sort(
+    (a, b) => a.position - b.position
+  );
+  const categoryVoiceChannels = categoryChannels?.filter(
+    (chan) => chan.type === 'voice'
+  );
+  const afkChannelId = categoryVoiceChannels?.last()?.id;
   if (!afkChannelId) return;
 
   if (member.voice.selfDeaf === (member.voice.channel.id === afkChannelId))
