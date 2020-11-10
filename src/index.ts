@@ -47,6 +47,8 @@ const processMember = async (memberId: string, guildId: string) => {
   const afkChannelId = CATEGORY_AFK_CHANNELS[member.voice.channel.parentID];
   if (!afkChannelId) return;
 
+  if (member.voice.streaming) return;
+
   if (member.voice.selfDeaf === (member.voice.channel.id === afkChannelId))
     return;
 
