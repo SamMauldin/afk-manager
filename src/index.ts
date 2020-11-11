@@ -55,6 +55,8 @@ const processMember = async (memberId: string, guildId: string) => {
   if (member.voice.selfDeaf === (member.voice.channel.id === afkChannelId))
     return;
 
+  if (member.user.bot) return;
+
   if (member.voice.selfDeaf) {
     if (member.voice.streaming) return;
     memberAFKInfo[member.id]!.lastChannel = member.voice.channel.id;
